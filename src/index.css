@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+:root {
+  --color-background: #f6efe6;
+  --color-card: #fbf7f1;
+  --color-primary: #203a47;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-primary);
+}
+
+/* tailwind utility classes */
+.bg-background { background-color: var(--color-background); }
+.bg-card { background-color: var(--color-card); }
+.text-primary { color: var(--color-primary); }
+.border-primary\/60 { border-color: color-mix(in oklab, var(--color-primary) 60%, transparent); }
+.border-primary\/90 { border-color: color-mix(in oklab, var(--color-primary) 90%, transparent); }
+.text-primary\/70 { color: color-mix(in oklab, var(--color-primary) 70%, transparent); }
+.text-primary\/80 { color: color-mix(in oklab, var(--color-primary) 80%, transparent); }
+
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

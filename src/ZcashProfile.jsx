@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './index.css'
 import { getRandomZcasher, getTotalCount, getZcasher } from './selectRandom'
 import { useParams, useNavigate } from 'react-router-dom'
+import QRModal from './QRModal'
 
 // magnifying glass icon svg
 function MagnifyingGlassIcon(props) {
@@ -116,8 +117,7 @@ function ZcashProfile() {
     // qr code content box hard code
     const contentBoxContent = (
         <div className="text-center p-4">
-            <div className="text-lg font-bold text-primary/80">Zcash Logo</div>
-            <div className="text-sm text-primary/60 mt-2">Content goes here</div>
+            <QRModal address={address} />
         </div>
     )
 

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './index.css'
+import { getRandomZcasher, getTotalCount } from './selectRandom'
 
 // magnifying glass icon svg
 function MagnifyingGlassIcon(props) {
@@ -40,11 +41,51 @@ function ContentBox({ children, className = "" }) {
 
 function App() {
   const [name, setName] = useState('Akbar Khamidov')
-  const [address] = useState('zs1q6t5r3r9908n3ehg0frxgkzhp')
-  const [sinceYear] = useState('YYYY')
-  const [lastSigned] = useState('<N')
+  const [address, setAddress] = useState('zs1q6t5r3r9908n3ehg0frxgkzhp')
+  const [sinceYear, setSinceYear] = useState('YYYY')
+  const [lastSigned, setLastSigned] = useState('<N')
+  const [count, setCount] = useState(0)
+  const [randomZcasher, setRandomZcasher] = useState(null)
 
-  function randomize() {
+  useEffect(() => {
+    const initializeApp = async () => {
+      const totalCount = await getTotalCount()
+      setCount(totalCount)
+      
+      // get initial random zcasher
+      const randomZcasher = await getRandomZcasher(totalCount)
+      if (randomZcasher) {
+        setRandomZcasher(randomZcasher)
+        setName(randomZcasher.name || 'Unknown')
+        setAddress(randomZcasher.address || 'Unknown')
+        setSinceYear(randomZcasher.sinceYear || 'Unknown')
+        setLastSigned(randomZcasher.lastSigned || 'Unknown')
+        console.log(randomZcasher)
+        console.log(name)
+        console.log(address)
+        console.log(sinceYear)
+        console.log(lastSigned)
+      } else {
+        console.log("No random zcasher found")
+      }
+    }
+    
+    initializeApp()
+  }, [])
+
+  async function randomize(count) {
+    const randomZcasher = await getRandomZcasher(count)
+    setRandomZcasher(randomZcasher)
+    setName(randomZcasher.name || "unknown")
+    setAddress(randomZcasher.address || "unknown")
+    setSinceYear(randomZcasher.sinceYear || "unknown")
+    setLastSigned(randomZcasher.lastSigned || "unknown")
+    // log the random zcasher
+    // console.log(randomZcasher)
+    // console.log(name)
+    // console.log(address)
+    // console.log(sinceYear)
+    // console.log(lastSigned)
   }
 
   async function copyAddress() {
@@ -124,7 +165,7 @@ function App() {
 
           {/* random */}
           <button 
-            onClick={randomize} 
+            onClick={() => randomize(count)} 
             className="w-full rounded-2xl border-4 border-primary/60 py-3 text-lg font-extrabold hover:bg-primary/10 transition-colors"
           >
             Show another random Zcasher

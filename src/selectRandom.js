@@ -24,3 +24,11 @@ export const getRandomZcasher = async (count) => {
   
   return data?.[0] || null
 }
+
+export const getZcasher = async (id) => {
+  const { data, error } = await supabase
+    .from('zcasher')
+    .select('*')
+    .eq('id', id)
+  return data?.[0] || null
+}

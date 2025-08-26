@@ -190,7 +190,7 @@ function ZcashProfile() {
 
         {/* footer */}
         <div className="mt-6 border-t-4 border-primary/60 pt-4 flex justify-center">
-          <a href="#" className="text-primary hover:text-primary/80 transition-colors" aria-label="GitHub">
+          <a href="https://github.com/ZcashUsersGroup/zcashme" className="text-primary hover:text-primary/80 transition-colors" aria-label="GitHub">
             <GithubIcon className="w-8 h-8" />
           </a>
         </div>

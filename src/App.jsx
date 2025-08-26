@@ -1,6 +1,6 @@
 import './index.css'
 import { Routes, Route} from 'react-router-dom'
-import ZcasherProfile from './zcashProfile'
+import ZcasherProfile from './ZcashProfile'
 
 function App() {
   return (

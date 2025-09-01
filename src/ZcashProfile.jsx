@@ -3,6 +3,7 @@ import './index.css'
 import { getRandomZcasher, getTotalCount, getZcasher } from './selectRandom'
 import { useParams, useNavigate } from 'react-router-dom'
 import QRModal from './QRModal'
+import AddUserForm from './AddUserForm'
 
 // magnifying glass icon svg
 function MagnifyingGlassIcon(props) {
@@ -33,6 +34,16 @@ function CopyIcon(props) {
     )
 }
 
+// plus icon svg
+function PlusIcon(props) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+    )
+}
+
 function ContentBox({ children, className = "" }) {
     return (
         <div className={`w-[280px] h-[280px] border-8 border-primary/60 bg-background rounded-lg flex items-center justify-center ${className}`}>
@@ -51,6 +62,7 @@ function ZcashProfile() {
     const [lastSigned, setLastSigned] = useState('<N')
     const [count, setCount] = useState(0)
     const [randomZcasher, setRandomZcasher] = useState(null)
+    const [showAddForm, setShowAddForm] = useState(false)
 
     useEffect(() => {
         const initializeApp = async () => {
@@ -63,7 +75,7 @@ function ZcashProfile() {
                     setRandomZcasher(zcasher)
                     setName(zcasher.name || 'Unknown')
                     setAddress(zcasher.address || 'Unknown')
-                    const year = new Date(zcasher.claimed_at).getFullYear()
+                    const year = new Date(zcasher.created_at).getFullYear()
                     setSinceYear(year || 'Unknown')
                     setLastSigned(zcasher.last_signed_at || 'Unknown')
                     console.log(zcasher)
@@ -79,7 +91,7 @@ function ZcashProfile() {
                     setRandomZcasher(randomZcasher)
                     setName(randomZcasher.name || 'Unknown')
                     setAddress(randomZcasher.address || 'Unknown')
-                    const year = new Date(randomZcasher.claimed_at).getFullYear()
+                    const year = new Date(randomZcasher.created_at).getFullYear()
                     setSinceYear(year || 'Unknown')
                     setLastSigned(randomZcasher.last_signed_at || 'Unknown')
                     console.log(randomZcasher)
@@ -114,6 +126,17 @@ function ZcashProfile() {
         }
     }
 
+    async function handleUserAdded(newUser) {
+        // update the count
+        const newCount = await getTotalCount()
+        setCount(newCount)
+        
+        // navigate to the new user
+        if (newUser && newUser.id) {
+            navigate(`/${newUser.id}`)
+        }
+    }
+
     // qr code content box hard code
     const contentBoxContent = (
         <div className="text-center p-4">
@@ -127,9 +150,18 @@ function ZcashProfile() {
         {/* header */}
         <div className="flex items-center justify-between border-b-4 border-primary/60 pb-4 mb-6">
           <h1 className="text-3xl font-extrabold tracking-tight">zcash.me/</h1>
-          <button className="flex items-center justify-left w-40 h-12 bg-background border-4 border-primary/60 rounded-full text-primary/70 hover:text-primary transition-colors">
-            <MagnifyingGlassIcon className="w-5 h-5 ml-3" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setShowAddForm(true)}
+              className="flex items-center justify-center w-12 h-12 bg-background border-4 border-primary/60 rounded-full text-primary/70 hover:text-primary transition-colors"
+              title="Add new Zcasher"
+            >
+              <PlusIcon className="w-5 h-5" />
+            </button>
+            <button className="flex items-center justify-left w-40 h-12 bg-background border-4 border-primary/60 rounded-full text-primary/70 hover:text-primary transition-colors">
+              <MagnifyingGlassIcon className="w-5 h-5 ml-3" />
+            </button>
+          </div>
         </div>
 
         {/* name */}
@@ -195,6 +227,13 @@ function ZcashProfile() {
           </a>
         </div>
       </div>
+
+      {/* add user form */}
+      <AddUserForm 
+        isOpen={showAddForm}
+        onClose={() => setShowAddForm(false)}
+        onUserAdded={handleUserAdded}
+      />
     </div>
   )
 }

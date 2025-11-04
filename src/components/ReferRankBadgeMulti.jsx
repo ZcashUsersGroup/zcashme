@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getExpandableTextClasses } from "../lib/badgeHelpers";
 
 export default function ReferRankBadgeMulti({ rank, period = "all", alwaysOpen = false }) {
   if (!rank || rank > 10) return null; // show only top 10
@@ -36,13 +37,7 @@ export default function ReferRankBadgeMulti({ rank, period = "all", alwaysOpen =
     >
       {scheme.emoji}
       <span className="font-semibold">#{rank}</span>
-      <span
-        className={`overflow-hidden inline-block transition-all duration-300 ease-in-out whitespace-nowrap ${
-          alwaysOpen || open
-            ? "max-w-[80px] opacity-100"
-            : "max-w-0 opacity-0 group-hover:max-w-[80px] group-hover:opacity-100"
-        }`}
-      >
+      <span className={getExpandableTextClasses(alwaysOpen || open, 80)}>
         {period === "all"
           ? " All-Time"
           : period === "weekly"

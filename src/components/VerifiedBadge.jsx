@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CheckIcon from "../assets/CheckIcon";
+import useTouchDevice from "../lib/useTouchDevice";
+import { getExpandableTextClasses } from "../lib/badgeHelpers";
 
 export default function VerifiedBadge({
   verified = true,
@@ -7,14 +9,7 @@ export default function VerifiedBadge({
   compact = false,
 }) {
   const [open, setOpen] = useState(false);
-
-  // Detect touch-capable devices
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-    }
-  }, []);
+  const isTouchDevice = useTouchDevice();
 
   // Auto-close timeout handler
   useEffect(() => {
@@ -24,9 +19,6 @@ export default function VerifiedBadge({
     }
     return () => clearTimeout(timer);
   }, [open, isTouchDevice]);
-
-  const baseClasses =
-    "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold tracking-wide select-none whitespace-nowrap align-middle";
 
   const checksToShow = Math.min(Math.max(verifiedCount, 1), 3); // clamp between 1–3
 
@@ -69,19 +61,12 @@ if (verified) {
           setOpen(true); // Open on tap
         }
       }}
-      className={`${baseClasses} group inline-flex items-center justify-center rounded-full border text-xs font-medium transition-all duration-300
-      text-green-800 bg-gradient-to-r from-green-100 to-green-200 border-green-300 shadow-sm px-[0.2rem] hover:px-[0.5rem] py-[0.1rem]`}
+      className="group inline-flex items-center justify-center rounded-full border text-xs font-medium transition-all duration-300 text-green-800 bg-gradient-to-r from-green-100 to-green-200 border-green-300 shadow-sm px-[0.2rem] hover:px-[0.5rem] py-[0.1rem]"
       style={{ fontFamily: "inherit" }}
     >
       <div className="flex items-center justify-center gap-0 group-hover:gap-1 transition-[gap] duration-300">
         {renderChecks("text-green-600")}
-        <span
-          className={`overflow-hidden inline-block transition-all duration-300 ease-in-out whitespace-nowrap ${
-            open
-              ? "max-w-[70px] opacity-100"
-              : "max-w-0 opacity-0 group-hover:max-w-[70px] group-hover:opacity-100"
-          }`}
-        >
+        <span className={getExpandableTextClasses(open, 70)}>
           Verified
         </span>
       </div>
@@ -98,8 +83,7 @@ if (verified) {
           setOpen(true);
         }
       }}
-      className={`${baseClasses} group inline-flex items-center justify-center rounded-full border text-xs font-medium transition-all duration-300
-      text-gray-600 bg-gray-100 border-gray-300 shadow-sm px-[0.2rem] hover:px-[0.5rem] py-[0.1rem]`}
+      className="group inline-flex items-center justify-center rounded-full border text-xs font-medium transition-all duration-300 text-gray-600 bg-gray-100 border-gray-300 shadow-sm px-[0.2rem] hover:px-[0.5rem] py-[0.1rem]"
       style={{ fontFamily: "inherit" }}
     >
       <div className="flex items-center justify-center gap-0 group-hover:gap-1 transition-[gap] duration-300">
@@ -111,13 +95,7 @@ if (verified) {
         >
           <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 5h2v6H9V5zm0 8h2v2H9v-2z" />
         </svg>
-        <span
-          className={`overflow-hidden inline-block transition-all duration-300 ease-in-out whitespace-nowrap ${
-            open
-              ? "max-w-[80px] opacity-100"
-              : "max-w-0 opacity-0 group-hover:max-w-[80px] group-hover:opacity-100"
-          }`}
-        >
+        <span className={getExpandableTextClasses(open, 80)}>
           Unverified
         </span>
       </div>

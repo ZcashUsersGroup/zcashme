@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import AddUserForm from "./AddUserForm";
 import ZcashFeedback from "./ZcashFeedback";
 import ZcashStats from "./ZcashStats";
-// import Toast from "./Toast";
-// import useToastMessage from "./hooks/useToastMessage";
 
 import ProfileCard from "./components/ProfileCard";
 import LetterGridModal from "./components/LetterGridModal";
@@ -28,7 +26,6 @@ export default function Directory() {
   const { profiles, loading } = useProfiles();
   const { showDirectory, setShowDirectory } = useDirectoryVisibility();
   const showAlpha = useAlphaVisibility(showDirectory);
- // const { toastMsg, showToast, closeToast } = useToastMessage();
 
   const [search, setSearch] = useState("");
   const [activeLetter, setActiveLetter] = useState(null);

@@ -53,6 +53,7 @@ The compiled output will be in the `dist/` directory.
 zcashme/
 ├── public/          # Static assets
 ├── src/             # React components, pages, and styles
+├── docs/            # Documentation
 ├── index.html       # Entry point
 ├── vite.config.js   # Vite configuration
 ├── package.json     # Dependencies and scripts
@@ -60,10 +61,24 @@ zcashme/
 
 ---
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the `docs/` folder:
+
+- **[Architecture](docs/ARCHITECTURE.md)** - System design, tech stack, and architecture decisions
+- **[Database](docs/DATABASE.md)** - Supabase schema, tables, views, and query patterns
+- **[Components](docs/COMPONENTS.md)** - Component hierarchy, props, and usage patterns
+- **[Features](docs/FEATURES.md)** - User-facing features and user flows
+- **[Setup](docs/SETUP.md)** - Installation, configuration, and troubleshooting guide
+
+For detailed information about the codebase, see the [documentation folder](docs/).
+
+---
+
 ## 🤝 Contributing
 
 Pull requests are welcome!
-For major changes, please open an issue first to discuss what you’d like to change.
+For major changes, please open an issue first to discuss what you'd like to change.
 
 ---
 

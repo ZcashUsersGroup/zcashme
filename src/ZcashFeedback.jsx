@@ -693,7 +693,7 @@ className="border border-gray-300 rounded-xl px-4 py-3 text-sm w-full bg-transpa
 
 
     <p className="text-xs text-gray-400 mt-1 italic text-center">
-      (Do not modify before sending! Include >{MIN_SIGNIN_AMOUNT} ZEC)
+      (Do not modify before sending! Include &gt;{MIN_SIGNIN_AMOUNT} ZEC)
     </p>
   </div>
 ) : (

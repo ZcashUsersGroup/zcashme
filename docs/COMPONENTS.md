@@ -385,6 +385,12 @@ zcash:ADDRESS?amount=AMOUNT&memo=MEMO
 - Conflict resolution for duplicate names
 - Handles both verified and unverified profile slugs
 
+**Implementation:**
+- Uses `useLocation()` from React Router to reactively track URL changes
+- The effect that reads the URL depends on `location.pathname`, ensuring it re-runs when the route changes
+- This provides immediate UI updates on navigation without requiring page refresh
+- Previously, the hook only reacted to profile changes, not URL changes, causing navigation to require a refresh
+
 ### `useTouchDevice.js`
 
 **Purpose**: Detects if device supports touch events

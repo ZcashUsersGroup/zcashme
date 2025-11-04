@@ -265,12 +265,13 @@ PWA settings are in `vite.config.js` under `VitePWA`:
 
 #### 6. Routing Not Working
 
-**Symptom**: Direct URLs return 404 or don't navigate correctly.
+**Symptom**: Direct URLs return 404 or don't navigate correctly, OR URL changes but page content doesn't update until refresh.
 
 **Solutions**:
 - Verify `historyApiFallback: true` in `vite.config.js`
 - For production, configure server to serve `index.html` for all routes
 - Check React Router version compatibility
+- **URL Changes But Page Doesn't Update**: This was fixed by using `useLocation()` hook in `useProfileRouting`. The hook now properly reacts to URL changes using `location.pathname` in the dependency array, ensuring the page updates immediately when navigating without requiring a refresh.
 
 ### Debugging Tips
 

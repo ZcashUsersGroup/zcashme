@@ -7,6 +7,21 @@
 
 This report documents the cleanup and refactoring work performed on the zcash.me React codebase to improve maintainability, remove unused code, and consolidate duplicate patterns.
 
+## Bug Fixes
+
+### Routing Navigation Fix
+
+**Issue:** URL changes (e.g., clicking feedback button navigating to `/Zechariah`) updated the browser URL but did not update the page content until a manual refresh.
+
+**Root Cause:** The `useProfileRouting` hook was reading `window.location.pathname` but not reacting to URL changes. The `useEffect` dependency array didn't include the location, so React didn't re-run the effect when routes changed.
+
+**Fix:** Updated `src/hooks/useProfileRouting.js` to:
+- Import and use `useLocation()` hook from React Router
+- Use `location.pathname` instead of `window.location.pathname`
+- Add `location.pathname` to the `useEffect` dependency array
+
+**Result:** Navigation now updates the UI immediately without requiring a page refresh. All route changes (button clicks, browser back/forward, direct URL access) work correctly.
+
 ## Statistics
 
 - **Files Created:** 2 (shared utilities)

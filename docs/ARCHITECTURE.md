@@ -114,6 +114,12 @@ The `useProfileRouting` hook handles:
   - Otherwise, oldest profile (lowest ID) is selected
   - Unverified profiles use `/name-id` format
 
+**Implementation Details:**
+- Uses `useLocation()` from React Router to reactively track URL changes
+- The hook's `useEffect` depends on `location.pathname` to automatically update when the URL changes
+- This ensures navigation updates the UI immediately without requiring a page refresh
+- Previously used `window.location.pathname` which didn't trigger React re-renders on route changes
+
 ## State Management
 
 ### Context API (store.jsx)

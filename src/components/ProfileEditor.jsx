@@ -40,7 +40,7 @@ function HelpIcon({ text }) {
 }
 
 
-export default function ProfileEditor({ profile }) {
+export default function ProfileEditor({ profile, initialValues, compact = false, readOnlyAddress = false }) {
   const { setPendingEdit, pendingEdits } = useFeedback();
 
   // Normalize incoming DB links
@@ -75,6 +75,20 @@ export default function ProfileEditor({ profile }) {
             },
           ],
   });
+
+  // Prefill initial values when provided (optional)
+  useEffect(() => {
+    if (initialValues && !ProfileEditor._initApplied) {
+      ProfileEditor._initApplied = true;
+      setForm((prev) => ({
+        ...prev,
+        address: initialValues.address ?? prev.address,
+        name: initialValues.name ?? prev.name,
+        bio: initialValues.bio ?? prev.bio,
+        profile_image_url: initialValues.profile_image_url ?? prev.profile_image_url,
+      }));
+    }
+  }, [initialValues]);
 
   // Keep originals for placeholders
   const originals = useMemo(
@@ -311,175 +325,126 @@ useEffect(() => {
     Array.isArray(pendingEdits?.l) && pendingEdits.l.includes(token);
 
   return (
-<div className="w-full -mx-6 -mb-1 bg-transparent text-left text-sm text-gray-800 overflow-visible">
-<div className="bg-transparent  overflow-hidden">
-      <p className="text-sm text-gray-400 text-center">
-                <br></br>
-    </p>
-     
-      {/* Address */}
-      <div className="mb-3 text-center">
-
-<label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
-  <span>Zcash Address</span>
-  <HelpIcon text="Your Zcash address where verification codes are sent." />
-</label>
-        <input
-          type="text"
-          value={form.address}
-          placeholder={originals.address}
-          onChange={(e) => handleChange("address", e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 font-mono text-sm placeholder-gray-400"
-        />
-      </div>
-
-      {/* Name */}
-      <div className="mb-3">
-        <label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
-  <span>Name</span>
-  <HelpIcon text="Your public display name for this profile." />
-</label>
-
-        <input
-          type="text"
-          value={form.name}
-          placeholder={originals.name}
-          onChange={(e) => handleChange("name", e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 text-sm placeholder-gray-400"
-        />
-      </div>
-
-      {/* Bio */}
-      <div className="mb-3 relative">
-<label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
-  <span>Biography</span>
-  <HelpIcon text="Your current story arc in 100 characters or less." />
-</label>
-        <textarea
-          rows={3}
-          maxLength={100}
-          value={form.bio}
-          placeholder={originals.bio}
-          onChange={(e) => handleChange("bio", e.target.value)}
-          className="border rounded-lg px-3 py-2 text-sm w-full resize-none overflow-hidden pr-8 pb-6 relative text-left whitespace-pre-wrap break-words"
-        />
-        <CharCounter text={form.bio} />
-      </div>
-
-      {/* Image URL */}
-      <div className="mb-3">
-<label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
-  <span>Profile Image URL</span>
-  <HelpIcon text="Link to PNG or JPG. Search 'free image link host'.  Try remove.bg & compresspng.com. " />
-</label>
-        <input
-          type="text"
-          value={form.profile_image_url}
-          placeholder={originals.profile_image_url}
-          onChange={(e) => handleChange("profile_image_url", e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 text-sm font-mono placeholder-gray-400"
-        />
-      </div>
-
-{/* Links */}
-{/* Links */}
-<div className="mb-4">
-  <div className="flex justify-between items-center mb-1">
-    <label className="block font-semibold text-gray-700">Links</label>
-    <div className="flex items-center gap-2">
-      <button
-        type="button"
-        onClick={resetLinks}
-        className="text-xs font-semibold text-gray-500 hover:text-gray-700 underline"
-      >
-        Reset
-      </button>
-      <HelpIcon text="Link verification requires OTP. Verified links cannot be changed." />
-    </div>
-  </div>
+<div className="w-full bg-transparent text-left text-sm text-gray-800 overflow-visible">
+  <div className="bg-transparent overflow-hidden">
+    {/* Address */}
+    <div className="mb-3">
+      <label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
+        <span>Zcash Address</span>
+        { !compact && <HelpIcon text="Your Zcash address where verification codes are sent." /> }
+      </label>
+      <input
+        type="text"
+        value={form.address}
+        placeholder={originals.address}
+        onChange={(e) => handleChange("address", e.target.value)}
+        readOnly={readOnlyAddress}
+        className={`w-full border rounded-lg px-3 py-2 font-mono text-sm placeholder-gray-400 ${readOnlyAddress ? "bg-gray-100 text-gray-600 cursor-not-allowed" : ""}`}
+      />
     </div>
 
+    {/* Name */}
+    <div className="mb-3">
+      <label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
+        <span>Name</span>
+        { !compact && <HelpIcon text="Your public display name for this profile." /> }
+      </label>
+      <input
+        type="text"
+        value={form.name}
+        placeholder={originals.name}
+        onChange={(e) => handleChange("name", e.target.value)}
+        className="w-full border rounded-lg px-3 py-2 text-sm placeholder-gray-400"
+      />
+    </div>
 
+    {/* Bio */}
+    <div className="mb-3 relative">
+      <label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
+        <span>Biography</span>
+        { !compact && <HelpIcon text="Your current story arc in 100 characters or less." /> }
+      </label>
+      <textarea
+        rows={3}
+        maxLength={100}
+        value={form.bio}
+        placeholder={originals.bio}
+        onChange={(e) => handleChange("bio", e.target.value)}
+        className="border rounded-lg px-3 py-2 text-sm w-full resize-none overflow-hidden pr-8 pb-6 whitespace-pre-wrap break-words"
+      />
+      <CharCounter text={form.bio} />
+    </div>
 
-        {form.links.map((row) => {
-          const original = originalLinks.find((o) => o.id === row.id) || {};
-          const isVerified = !!original?.is_verified;
-          const canVerify = !!profile.address_verified;
+    {/* Image URL */}
+    <div className="mb-3">
+      <label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
+        <span>Profile Image URL</span>
+        { !compact && <HelpIcon text="Link to PNG or JPG. Search 'free image link host'.  Try remove.bg & compresspng.com. " /> }
+      </label>
+      <input
+        type="text"
+        value={form.profile_image_url}
+        placeholder={originals.profile_image_url}
+        onChange={(e) => handleChange("profile_image_url", e.target.value)}
+        className="w-full border rounded-lg px-3 py-2 text-sm font-mono placeholder-gray-400"
+      />
+    </div>
 
-          const token = row.id ? `!${row.id}` : row.url.trim() ? `+!${row.url.trim()}` : null;
-          const isPending = token && isPendingToken(token);
+    {/* Links */}
+    <div className="mb-4">
+      <div className="flex justify-between items-center mb-1">
+        <label className="block font-semibold text-gray-700">Links</label>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={resetLinks} className="text-xs font-semibold text-gray-500 hover:text-gray-700 underline">Reset</button>
+          { !compact && <HelpIcon text="Link verification requires OTP. Verified links cannot be changed." /> }
+        </div>
+      </div>
 
-          return (
-            <div key={row._uid} className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-              <input
-                type="text"
-                value={row.url}
-                placeholder={original?.url || "example.com"}
-                onChange={(e) => handleLinkChange(row._uid, e.target.value)}
-                readOnly={isVerified}
-                className={`flex-1 border rounded-lg px-3 py-1.5 text-sm font-mono ${
-                  isVerified
-                    ? "bg-gray-100 text-gray-500 cursor-not-allowed"
-                    : "border-gray-300 focus:border-blue-500"
-                } placeholder-gray-400`}
-              />
-
-              <div className="flex items-center gap-2">
-                {!canVerify ? (
-                  <span className="text-xs text-gray-500 italic">
-                    Link verification – verify your Zcash address first
-                  </span>
-                ) : isVerified ? (
-                  <button
-                    type="button"
-                    disabled
-                    className="text-xs px-2 py-1 text-green-700 border border-green-400 rounded opacity-60 cursor-not-allowed"
-                  >
-                    Verified
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!token) return;
-                      if (isPending) removeLinkToken(token);
-                      else appendLinkToken(token);
-                    }}
-                    className={`text-xs px-2 py-1 border rounded ${
-                      isPending
-                        ? "text-yellow-700 border-yellow-400 bg-yellow-50"
-                        : "text-blue-600 border-blue-400 hover:bg-blue-50"
-                    }`}
-                  >
-                    {isPending ? "Pending" : "Verify"}
-                  </button>
-                )}
-
+      {form.links.map((row) => {
+        const original = originalLinks.find((o) => o.id === row.id) || {};
+        const isVerified = !!original?.is_verified;
+        const canVerify = !!profile.address_verified;
+        const token = row.id ? `!${row.id}` : row.url.trim() ? `+!${row.url.trim()}` : null;
+        const isPending = token && isPendingToken(token);
+        return (
+          <div key={row._uid} className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+            <input
+              type="text"
+              value={row.url}
+              placeholder={original?.url || "example.com"}
+              onChange={(e) => handleLinkChange(row._uid, e.target.value)}
+              readOnly={isVerified}
+              className={`flex-1 border rounded-lg px-3 py-1.5 text-sm font-mono ${isVerified ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "border-gray-300 focus:border-blue-500"} placeholder-gray-400`}
+            />
+            <div className="flex items-center gap-2">
+              {!canVerify ? (
+                <span className="text-xs text-gray-500 italic">Link verification – verify your Zcash address first</span>
+              ) : isVerified ? (
+                <button type="button" disabled className="text-xs px-2 py-1 text-green-700 border border-green-400 rounded opacity-60 cursor-not-allowed">Verified</button>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => removeLink(row._uid)}
-                  className="text-xs text-red-600 hover:underline"
+                  onClick={() => {
+                    if (!token) return;
+                    if (isPending) removeLinkToken(token);
+                    else appendLinkToken(token);
+                  }}
+                  className={`text-xs px-2 py-1 border rounded ${isPending ? "text-yellow-700 border-yellow-400 bg-yellow-50" : "text-blue-600 border-blue-400 hover:bg-blue-50"}`}
                 >
-                  ⌫ Remove Link
+                  {isPending ? "Pending" : "Verify"}
                 </button>
-              </div>
+              )}
+              <button type="button" onClick={() => removeLink(row._uid)} className="text-xs text-red-600 hover:underline">⌫ Remove Link</button>
             </div>
-            
-          );
-        })}
+          </div>
+        );
+      })}
 
-        <button
-          type="button"
-          onClick={addLink}
-          className="text-sm font-semibold text-blue-700 hover:underline mt-1"
-        >
-          ＋ Add Link
-        </button>
-      </div>
-      <p className="text-sm text-gray-400 text-center">
-                <br></br>Verify your changes below. 
-        <br></br>        <br></br>
-    </p>
+      <button type="button" onClick={addLink} className="text-sm font-semibold text-blue-700 hover:underline mt-1">＋ Add Link</button>
     </div>
-  );
+  </div>
+</div>
+);
 }
+
+// (removed stray init block; logic now handled via useEffect above)

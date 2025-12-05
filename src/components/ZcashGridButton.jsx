@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import directoryIcon from '../assets/icons/minimalist/directory.svg';
-import forumIcon from '../assets/icons/minimalist/forum.svg';
-import mapsIcon from '../assets/icons/minimalist/maps.svg';
-import viewkeyIcon from '../assets/icons/minimalist/viewkey.svg';
-import newsIcon from '../assets/icons/minimalist/news.svg';
+import directoryIcon from '../assets/icons/zcashme/directory.svg';
+import forumIcon from '../assets/icons/zcashme/forum.svg';
+import mapsIcon from '../assets/icons/zcashme/maps.svg';
+import viewkeyIcon from '../assets/icons/zcashme/viewkey.svg';
+import newsIcon from '../assets/icons/zcashme/news.svg';
 
 const apps = [
   { name: 'Directory', icon: directoryIcon},
